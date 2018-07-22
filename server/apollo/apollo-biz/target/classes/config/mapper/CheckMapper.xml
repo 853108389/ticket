@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kk.apollo.biz.dao.ticket.CheckMapper">
+	<resultMap id="BaseResultMap" type="com.kk.apollo.biz.model.ticket.Check">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="checkTicketId" property="checkticketid"
+			jdbcType="INTEGER" />
+		<result column="checkUserId" property="checkuserid" jdbcType="INTEGER" />
+		<result column="checkTime" property="checktime" jdbcType="DATE" />
+		<result column="checkResult" property="checkresult" jdbcType="VARCHAR" />
+		<result column="checkReason" property="checkreason" jdbcType="VARCHAR" />
+		<result column="checkUser" property="checkuser" jdbcType="VARCHAR" />
+	</resultMap>
+	
+
+	<sql id="Base_Column_List">
+		id, checkTicketId, checkUserId, checkTime, checkResult,
+		checkReason,
+		checkUser
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from `check`
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from `check`
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.kk.apollo.biz.model.ticket.Check">
+		insert into `check` (id,
+		checkTicketId, checkUserId,
+		checkTime, checkResult, checkReason,
+		checkUser)
+		values (#{id,jdbcType=INTEGER},
+		#{checkticketid,jdbcType=INTEGER},
+		#{checkuserid,jdbcType=INTEGER},
+		CURDATE(), #{checkresult,jdbcType=VARCHAR},
+		#{checkreason,jdbcType=VARCHAR},
+		#{checkuser,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.kk.apollo.biz.model.ticket.Check">
+		insert into `check`
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="checkticketid != null">
+				checkTicketId,
+			</if>
+			<if test="checkuserid != null">
+				checkUserId,
+			</if>
+			<if test="checktime != null">
+				checkTime,
+			</if>
+			<if test="checkresult != null">
+				checkResult,
+			</if>
+			<if test="checkreason != null">
+				checkReason,
+			</if>
+			<if test="checkuser != null">
+				checkUser,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="checkticketid != null">
+				#{checkticketid,jdbcType=INTEGER},
+			</if>
+			<if test="checkuserid != null">
+				#{checkuserid,jdbcType=INTEGER},
+			</if>
+			<if test="checktime != null">
+				#{checktime,jdbcType=DATE},
+			</if>
+			<if test="checkresult != null">
+				#{checkresult,jdbcType=VARCHAR},
+			</if>
+			<if test="checkreason != null">
+				#{checkreason,jdbcType=VARCHAR},
+			</if>
+			<if test="checkuser != null">
+				#{checkuser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.kk.apollo.biz.model.ticket.Check">
+		update `check`
+		<set>
+			<if test="checkticketid != null">
+				checkTicketId = #{checkticketid,jdbcType=INTEGER},
+			</if>
+			<if test="checkuserid != null">
+				checkUserId = #{checkuserid,jdbcType=INTEGER},
+			</if>
+			<if test="checktime != null">
+				checkTime = #{checktime,jdbcType=DATE},
+			</if>
+			<if test="checkresult != null">
+				checkResult = #{checkresult,jdbcType=VARCHAR},
+			</if>
+			<if test="checkreason != null">
+				checkReason = #{checkreason,jdbcType=VARCHAR},
+			</if>
+			<if test="checkuser != null">
+				checkUser = #{checkuser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.kk.apollo.biz.model.ticket.Check">
+		update `check`
+		set
+		checkTicketId = #{checkticketid,jdbcType=INTEGER},
+		checkUserId =
+		#{checkuserid,jdbcType=INTEGER},
+		checkTime =
+		#{checktime,jdbcType=DATE},
+		checkResult =
+		#{checkresult,jdbcType=VARCHAR},
+		checkReason =
+		#{checkreason,jdbcType=VARCHAR},
+		checkUser =
+		#{checkuser,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>

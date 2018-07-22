@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kk.apollo.biz.dao.user.UserMapper">
+    <resultMap id="BaseResultMap" type="com.kk.apollo.biz.model.user.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="unitId" property="unitid" jdbcType="INTEGER"/>
+        <result column="truename" property="truename" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="loginname" property="loginname" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询通过数量-->
+    <resultMap id="TicketSumMap" type="com.kk.apollo.biz.model.ticket.TicketSum">
+        <result column="sumtpass" property="pass" jdbcType="VARCHAR"/>
+        <result column="sumtnopass" property="nopass" jdbcType="VARCHAR"/>
+        <result column="sumtmoney" property="sumMoney" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--多表查询-->
+    <resultMap id="UserCheckRoleMap" type="com.kk.apollo.biz.model.user.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="unitId" property="unitid" jdbcType="INTEGER"/>
+        <result column="truename" property="truename" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="loginname" property="loginname" jdbcType="VARCHAR"/>
+        <collection property="checkList" resultMap="CheckMap"/>
+        <collection property="roleList" resultMap="RoleMap"/>
+    </resultMap>
+    <!-- 一对多CheckMap -->
+    <resultMap id="CheckMap" type="com.kk.apollo.biz.model.ticket.Check">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="checkTicketId" property="checkticketid"
+                jdbcType="INTEGER"/>
+        <result column="checkUserId" property="checkuserid" jdbcType="INTEGER"/>
+        <result column="checkTime" property="checktime" jdbcType="DATE"/>
+        <result column="checkResult" property="checkresult" jdbcType="VARCHAR"/>
+        <result column="checkReason" property="checkreason" jdbcType="VARCHAR"/>
+        <result column="checkUser" property="checkuser" jdbcType="VARCHAR"/>
+        <collection property="ticketList" resultMap="TicketMap"/>
+    </resultMap>
+    <!-- 一对多RoleMap -->
+    <resultMap id="RoleMap" type="com.kk.apollo.biz.model.shiro.Role">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="rname" property="rname" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <collection property="permissionList" resultMap="PermissiontMap"/>
+    </resultMap>
+    <!-- 一对多PermissiontMap -->
+    <resultMap id="PermissiontMap" type="com.kk.apollo.biz.model.shiro.Permission">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="pname" property="pname" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="path" property="path" jdbcType="VARCHAR"/>
+        <result column="memu" property="memu" jdbcType="VARCHAR"/>
+        <result column="plevel" property="plevel" jdbcType="INTEGER"/>
+        <result column="parentId" property="parentid" jdbcType="INTEGER"/>
+    </resultMap>
+    <!-- 一对多TicketMap -->
+    <resultMap id="TicketMap" type="com.kk.apollo.biz.model.ticket.Ticket">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="tcode" property="tcode" jdbcType="VARCHAR"/>
+        <result column="tnumber" property="tnumber" jdbcType="VARCHAR"/>
+        <result column="tmoney" property="tmoney" jdbcType="VARCHAR"/>
+        <result column="tdate" property="tdate" jdbcType="VARCHAR"/>
+        <result column="tcheckcode" property="tcheckcode" jdbcType="VARCHAR"/>
+        <result column="tchecked" property="tchecked" jdbcType="INTEGER"/>
+        <result column="tnopass" property="tnopass" jdbcType="VARCHAR"/>
+        <result column="tpass" property="tpass" jdbcType="VARCHAR"/>
+        <result column="tpredate" property="tpredate" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, unitId, truename, password, loginname
+    </sql>
+    <sql id="User_Check_Ticket">
+            t1.id as id,
+            t1.unitId as unitId,
+            t1.truename as truename,
+            t1.password as password,
+            t1.loginname as loginname,
+            t2.checkTime as checkTime,
+            t2.checkResult as checkResult,
+            t2.checkReason as checkReason,
+            t2.checkUser as checkUser,
+            t2.checkTicketId as checkTicketId,
+            t2.checkUserId as checkUserId,
+            t3.tcode as tcode,
+            t3.tnumber as tnumber,
+            t3.tmoney as tmoney,
+            t3.tdate as tdate,
+            t3.tcheckcode as tcheckcode,
+            t3.tchecked as tchecked,
+            t4.uname as unme
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from user
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.kk.apollo.biz.model.user.User">
+        insert into user (id, unitId, truename,
+        password, loginname)
+        values (#{id,jdbcType=INTEGER}, #{unitid,jdbcType=INTEGER}, #{truename,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR}, #{loginname,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.kk.apollo.biz.model.user.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="unitid != null">
+                unitId,
+            </if>
+            <if test="truename != null">
+                truename,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="loginname != null">
+                loginname,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="unitid != null">
+                #{unitid,jdbcType=INTEGER},
+            </if>
+            <if test="truename != null">
+                #{truename,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="loginname != null">
+                #{loginname,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.kk.apollo.biz.model.user.User">
+        update user
+        <set>
+            <if test="unitid != null">
+                unitId = #{unitid,jdbcType=INTEGER},
+            </if>
+            <if test="truename != null">
+                truename = #{truename,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="loginname != null">
+                loginname = #{loginname,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kk.apollo.biz.model.user.User">
+        update user
+        set unitId = #{unitid,jdbcType=INTEGER},
+        truename = #{truename,jdbcType=VARCHAR},
+        password = #{password,jdbcType=VARCHAR},
+        loginname = #{loginname,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <!--以下为自定义方法-->
+    <select id="getUserByName" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select
+          <include refid="Base_Column_List"/>
+        from user
+        where loginname = #{loginname,jdbcType=VARCHAR}
+    </select>
+    <select id="fetchPassNoPassByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+          SELECT
+            COUNT(t2.checkResult)
+          FROM
+            `user` t1,
+            `check` t2,
+             ticket t3
+          Where
+              t1.id = t2.checkUserId
+          AND
+              t3.id = t2.checkTicketId
+          AND
+              t1.id = #{id,jdbcType=INTEGER}
+          GROUP BY
+            t2.checkResult
+          Order By
+   	        t2.checkResult  desc
+    </select>
+    <select id="getUnitByUserId" parameterType="java.lang.Integer" resultType="com.kk.apollo.biz.model.user.Unit">
+          SELECT
+           t4.uname as unme
+          FROM
+             unit t4
+          Where
+            #{0} = t4.id
+    </select>
+
+</mapper>

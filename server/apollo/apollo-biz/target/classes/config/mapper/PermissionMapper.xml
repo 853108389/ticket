@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kk.apollo.biz.dao.shiro.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.kk.apollo.biz.model.shiro.Permission" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="pname" property="pname" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="memu" property="memu" jdbcType="VARCHAR" />
+    <result column="plevel" property="plevel" jdbcType="INTEGER" />
+    <result column="parentId" property="parentid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, pname, description, path, memu, plevel, parentId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from permission
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from permission
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kk.apollo.biz.model.shiro.Permission" >
+    insert into permission (id, pname, description,
+    path, memu, plevel,
+    parentId)
+    values (#{id,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+    #{path,jdbcType=VARCHAR}, #{memu,jdbcType=VARCHAR}, #{plevel,jdbcType=INTEGER},
+    #{parentid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kk.apollo.biz.model.shiro.Permission" >
+    insert into permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pname != null" >
+        pname,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="memu != null" >
+        memu,
+      </if>
+      <if test="plevel != null" >
+        plevel,
+      </if>
+      <if test="parentid != null" >
+        parentId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pname != null" >
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="memu != null" >
+        #{memu,jdbcType=VARCHAR},
+      </if>
+      <if test="plevel != null" >
+        #{plevel,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kk.apollo.biz.model.shiro.Permission" >
+    update permission
+    <set >
+      <if test="pname != null" >
+        pname = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="memu != null" >
+        memu = #{memu,jdbcType=VARCHAR},
+      </if>
+      <if test="plevel != null" >
+        plevel = #{plevel,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        parentId = #{parentid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kk.apollo.biz.model.shiro.Permission" >
+    update permission
+    set pname = #{pname,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      memu = #{memu,jdbcType=VARCHAR},
+      plevel = #{plevel,jdbcType=INTEGER},
+      parentId = #{parentid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

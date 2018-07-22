@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kk.apollo.biz.dao.ticket.TicketMapper">
+    <!--统计-->
+    <resultMap id="TicketSumMap" type="com.kk.apollo.biz.model.ticket.TicketSum">
+        <result column="sumtpass" property="pass" jdbcType="VARCHAR"/>
+        <result column="sumtnopass" property="nopass" jdbcType="VARCHAR"/>
+        <result column="sumtmoney" property="sumMoney" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="com.kk.apollo.biz.model.ticket.Ticket">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="tcode" property="tcode" jdbcType="VARCHAR"/>
+        <result column="tnumber" property="tnumber" jdbcType="VARCHAR"/>
+        <result column="tmoney" property="tmoney" jdbcType="VARCHAR"/>
+        <result column="tdate" property="tdate" jdbcType="VARCHAR"/>
+        <result column="tcheckcode" property="tcheckcode" jdbcType="VARCHAR"/>
+        <result column="tchecked" property="tchecked" jdbcType="INTEGER"/>
+    </resultMap>
+    <!--查询和检查-->
+    <resultMap id="TicketCheckMap" type="com.kk.apollo.biz.model.ticket.TicketCheck">
+        <result column="checktime" property="checktime" jdbcType="VARCHAR"/>
+        <result column="checkresult" property="checkresult" jdbcType="VARCHAR"/>
+        <result column="checkreason" property="checkreason" jdbcType="VARCHAR"/>
+        <result column="checkuser" property="checkuser" jdbcType="VARCHAR"/>
+        <result column="tcode" property="tcode" jdbcType="VARCHAR"/>
+        <result column="tnumber" property="tnumber" jdbcType="INTEGER"/>
+        <result column="tmoney" property="tmoney" jdbcType="VARCHAR"/>
+        <result column="tdate" property="tdate" jdbcType="VARCHAR"/>
+        <result column="tcheckcode" property="tcheckcode" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, tcode, tnumber, tmoney, tdate, tcheckcode, tchecked
+  </sql>
+    <sql id="User_Check_Ticket">
+     t1.id as id,
+            t1.unitId as unitId,
+            t1.truename as truename,
+            t1.password as password,
+            t1.loginname as loginname,
+            t2.checkTime as checkTime,
+            t2.checkResult as checkResult,
+            t2.checkReason as checkReason,
+            t2.checkUser as checkUser,
+            t2.checkTicketId as checkTicketId,
+            t2.checkUserId as checkUserId,
+            t3.tcode as tcode,
+            t3.tnumber as tnumber,
+            t3.tmoney as tmoney,
+            t3.tdate as tdate,
+            t3.tcheckcode as tcheckcode,
+            t3.tchecked as tchecked
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from ticket
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ticket
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.kk.apollo.biz.model.ticket.Ticket">
+    insert into ticket (id, tcode, tnumber,
+    tmoney, tdate, tcheckcode,
+    tchecked)
+    values (#{id,jdbcType=INTEGER}, #{tcode,jdbcType=VARCHAR}, #{tnumber,jdbcType=VARCHAR},
+    #{tmoney,jdbcType=VARCHAR}, #{tdate,jdbcType=VARCHAR}, #{tcheckcode,jdbcType=VARCHAR},
+    #{tchecked,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.kk.apollo.biz.model.ticket.Ticket">
+        insert into ticket
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="tcode != null">
+                tcode,
+            </if>
+            <if test="tnumber != null">
+                tnumber,
+            </if>
+            <if test="tmoney != null">
+                tmoney,
+            </if>
+            <if test="tdate != null">
+                tdate,
+            </if>
+            <if test="tcheckcode != null">
+                tcheckcode,
+            </if>
+            <if test="tchecked != null">
+                tchecked,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="tcode != null">
+                #{tcode,jdbcType=VARCHAR},
+            </if>
+            <if test="tnumber != null">
+                #{tnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="tmoney != null">
+                #{tmoney,jdbcType=VARCHAR},
+            </if>
+            <if test="tdate != null">
+                #{tdate,jdbcType=VARCHAR},
+            </if>
+            <if test="tcheckcode != null">
+                #{tcheckcode,jdbcType=VARCHAR},
+            </if>
+            <if test="tchecked != null">
+                #{tchecked,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.kk.apollo.biz.model.ticket.Ticket">
+        update ticket
+        <set>
+            <if test="tcode != null">
+                tcode = #{tcode,jdbcType=VARCHAR},
+            </if>
+            <if test="tnumber != null">
+                tnumber = #{tnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="tmoney != null">
+                tmoney = #{tmoney,jdbcType=VARCHAR},
+            </if>
+            <if test="tdate != null">
+                tdate = #{tdate,jdbcType=VARCHAR},
+            </if>
+            <if test="tcheckcode != null">
+                tcheckcode = #{tcheckcode,jdbcType=VARCHAR},
+            </if>
+            <if test="tchecked != null">
+                tchecked = #{tchecked,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kk.apollo.biz.model.ticket.Ticket">
+    update ticket
+    set tcode = #{tcode,jdbcType=VARCHAR},
+      tnumber = #{tnumber,jdbcType=VARCHAR},
+      tmoney = #{tmoney,jdbcType=VARCHAR},
+      tdate = #{tdate,jdbcType=VARCHAR},
+      tcheckcode = #{tcheckcode,jdbcType=VARCHAR},
+      tchecked = #{tchecked,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="findAllTickets" resultMap="BaseResultMap">
+    select  *  from ticket;
+  </select>
+    <select id="findTicketByTnumber" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select  *  from ticket where tnumber =#{tnumber};
+  </select>
+    <select id="findTicketPass" resultType="java.lang.Integer">
+    select  sum(tpass)  from ticket;
+  </select>
+    <select id="findTickeyNopass" resultType="java.lang.Integer">
+    select  sum(tnopass)  from ticket;
+  </select>
+    <!--
+    验证时间
+    验证结果
+    理由
+    验证人
+    发票代码
+    发票号码
+    税前金额
+    开票日期
+    发票校验码
+    -->
+    <select id="findByYears" resultMap="TicketCheckMap">
+
+    select
+        t2.checkTime as checktime,
+        t2.checkResult as checkresult,
+        t2.checkReason as checkreason,
+        t2.checkUser as checkuser,
+        t3.tcode as tcode,
+        t3.tnumber as tnumber,
+        t3.tmoney as tmoney,
+        t3.tdate as tdate,
+        t3.tcheckcode as tcheckcode
+    from
+      `user` t1,
+      `check` t2,
+       ticket t3
+    where
+      tdate BETWEEN #{0} and  #{1}
+      AND
+      t1.id = t2.checkUserId
+      AND
+      t3.id = t2.checkTicketId
+      AND
+      t1.id = #{2}
+
+  </select>
+
+    <select id="findSumByYear" resultMap="TicketSumMap">
+    SELECT
+      a1.sumtpass  as sumtpass,
+      a2.sumtnopass as sumtnopass,
+      a3.sumtmoney as sumtmoney
+    from
+      (select
+          count(t2.checkresult) as sumtpass
+      from
+          `user` t1,
+           `check` t2,
+           ticket t3
+       where
+          t2.checkresult = 1
+       and
+           t3.tdate like  CONCAT(#{0}, '%')
+        AND
+          t1.id = t2.checkUserId
+        AND
+          t3.id = t2.checkTicketId
+        AND
+          t1.id = #{1}
+      ) as a1,
+      (select
+          count(t2.checkresult) as sumtnopass
+      from
+          `user` t1,
+          `check` t2,
+          ticket t3
+       where
+          t2.checkresult = 0
+       AND
+           t3.tdate like  CONCAT(#{0}, '%')
+        AND
+          t1.id = t2.checkUserId
+        AND
+          t3.id = t2.checkTicketId
+        AND
+          t1.id = #{1}
+       )  as a2,
+      (select
+          sum(t3.tmoney) as  sumtmoney
+      from
+          `user` t1,
+          `check` t2,
+          ticket t3
+       where
+          t2.checkresult = 1
+       AND
+           t3.tdate like  CONCAT(#{0}, '%')
+        AND
+          t1.id = t2.checkUserId
+        AND
+          t3.id = t2.checkTicketId
+        AND
+          t1.id = #{1}
+        AND
+          t2.checkResult &gt;= 1
+       )  as a3
+
+  </select>
+    <select id="findfetchPassDetail" resultMap="TicketCheckMap">
+         select
+                t2.checkTime as checktime,
+                t2.checkResult as checkresult,
+                t2.checkReason as checkreason,
+                t2.checkUser as checkuser,
+                t3.tcode as tcode,
+                t3.tnumber as tnumber,
+                t3.tmoney as tmoney,
+                t3.tdate as tdate,
+                t3.tcheckcode as tcheckcode
+            from
+              `user` t1,
+              `check` t2,
+               ticket t3
+            where
+              t1.id = t2.checkUserId
+              AND
+              t3.id = t2.checkTicketId
+              AND
+              t1.id = #{0}
+              AND
+              t2.checkResult >= 1
+  </select>
+    <select id="findfetchNoPassDetail" resultMap="TicketCheckMap">
+        select
+        t2.checkTime as checktime,
+        t2.checkResult as checkresult,
+        t2.checkReason as checkreason,
+        t2.checkUser as checkuser,
+        t3.tcode as tcode,
+        t3.tnumber as tnumber,
+        t3.tmoney as tmoney,
+        t3.tdate as tdate,
+        t3.tcheckcode as tcheckcode
+        from
+        `user` t1,
+        `check` t2,
+        ticket t3
+        where
+        t1.id = t2.checkUserId
+        AND
+        t3.id = t2.checkTicketId
+        AND
+        t1.id = #{0}
+        AND
+        t2.checkResult &lt;= 0
+    </select>
+
+</mapper>
